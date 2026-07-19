@@ -66,7 +66,7 @@ export default function CameraScreen() {
 
   // MODULE 3 - CAPTURE PHOTO ACTION
   const takePicture = async () => {
-    if (Platform.OS === 'web' || !CameraView) {
+    if (!CameraView) {
       // Handle Web/Simulator Capture Mock
       simulateCapture();
       return;
@@ -140,7 +140,7 @@ export default function CameraScreen() {
   };
 
   // Permission Flow Screen
-  if (!permission && Platform.OS !== 'web') {
+  if (!permission) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#1E3A8A" />
@@ -149,7 +149,7 @@ export default function CameraScreen() {
     );
   }
 
-  if (Platform.OS !== 'web' && permission && !permission.granted) {
+  if (permission && !permission.granted) {
     return (
       <View style={styles.container}>
         <CustomHeader title="Camera Permission" />
@@ -216,7 +216,7 @@ export default function CameraScreen() {
           <ActivityIndicator size="large" color="#1E3A8A" />
           <Text style={styles.cameraLoadingText}>Initializing Lens...</Text>
         </View>
-      ) : Platform.OS === 'web' || !CameraView ? (
+      ) : !CameraView ? (
         // Fallback Mock Camera View for Web/Simulators
         <View style={styles.mockCameraContainer}>
           <View style={styles.mockCameraHeader}>
