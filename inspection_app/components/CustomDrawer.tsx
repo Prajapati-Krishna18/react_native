@@ -88,7 +88,7 @@ export const CustomDrawer: React.FC<DrawerContentComponentProps> = () => {
 
         {/* Settings at the bottom */}
         <DrawerItem
-          label="Profile & Settings"
+          label="Settings"
           iconName="settings"
           targetPath="/(tabs)/profile"
           isActive={isRouteActive('/(tabs)/profile')}

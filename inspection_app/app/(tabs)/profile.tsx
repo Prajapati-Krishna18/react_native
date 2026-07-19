@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Alert, Pressable, Switch, Platform } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Alert, Pressable, Switch, Platform, Button } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSurveys } from '../../context/SurveyContext';
 import { CustomHeader } from '../../components/CustomHeader';
@@ -129,6 +129,18 @@ export default function ProfileScreen() {
             </View>
             <Ionicons name="chevron-forward" size={16} color="#EF4444" />
           </Pressable>
+        </View>
+
+        <View style={{ marginTop: 12 }}>
+          <Button
+            title="Reset Settings To Default"
+            color="#4B5563"
+            onPress={() => {
+              setIsNotificationsEnabled(true);
+              setIsLocationTrackingEnabled(true);
+              Alert.alert('Reset Preferences', 'Your notifications and GPS settings have been reset.');
+            }}
+          />
         </View>
 
         {/* About App Footer */}
