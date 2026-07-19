@@ -10,6 +10,7 @@ import {
   Image,
   Modal,
   ScrollView,
+  Platform,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
@@ -29,23 +30,36 @@ export default function HistoryScreen() {
 
   // MODULE 8 - DELETE SURVEY WITH CONFIRMATION
   const handleDeleteSurvey = (id: string) => {
-    Alert.alert(
-      'Delete Survey Log',
-      'Are you sure you want to permanently delete this field survey? This action cannot be undone.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete Log',
-          style: 'destructive',
-          onPress: async () => {
-            await deleteSurvey(id);
-            setIsModalVisible(false);
-            setSelectedSurvey(null);
-            Alert.alert('Deleted', 'The survey log has been deleted.');
+    const title = 'Delete Survey Log';
+    const message = 'Are you sure you want to permanently delete this field survey? This action cannot be undone.';
+    
+    if (Platform.OS === 'web') {
+      const confirmDelete = window.confirm(`${title}\n\n${message}`);
+      if (confirmDelete) {
+        deleteSurvey(id);
+        setIsModalVisible(false);
+        setSelectedSurvey(null);
+        alert('The survey log has been deleted.');
+      }
+    } else {
+      Alert.alert(
+        title,
+        message,
+        [
+          { text: 'Cancel', style: 'cancel' },
+          {
+            text: 'Delete Log',
+            style: 'destructive',
+            onPress: async () => {
+              await deleteSurvey(id);
+              setIsModalVisible(false);
+              setSelectedSurvey(null);
+              Alert.alert('Deleted', 'The survey log has been deleted.');
+            },
           },
-        },
-      ]
-    );
+        ]
+      );
+    }
   };
 
   const openSurveyDetails = (survey: Survey) => {

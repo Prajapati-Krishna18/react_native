@@ -13,29 +13,49 @@ export default function ProfileScreen() {
 
   // Clear all survey data action
   const handleClearAllData = () => {
-    Alert.alert(
-      'Reset Data',
-      'Are you sure you want to delete all saved surveys? This action cannot be undone.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Reset Everything',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              const AsyncStorage = require('@react-native-async-storage/async-storage').default;
-              await AsyncStorage.removeItem('@field_surveys_list');
-              // Reload context
-              await loadSurveys();
-              clearDraft();
-              Alert.alert('Reset Success', 'All survey data has been cleared.');
-            } catch (err) {
-              Alert.alert('Error', 'Failed to clear data.');
-            }
+    const title = 'Reset Data';
+    const message = 'Are you sure you want to delete all saved surveys? This action cannot be undone.';
+    
+    if (Platform.OS === 'web') {
+      const confirmReset = window.confirm(`${title}\n\n${message}`);
+      if (confirmReset) {
+        (async () => {
+          try {
+            const AsyncStorage = require('@react-native-async-storage/async-storage').default;
+            await AsyncStorage.removeItem('@field_surveys_list');
+            await loadSurveys();
+            clearDraft();
+            alert('All survey data has been cleared.');
+          } catch (err) {
+            alert('Failed to clear data.');
+          }
+        })();
+      }
+    } else {
+      Alert.alert(
+        title,
+        message,
+        [
+          { text: 'Cancel', style: 'cancel' },
+          {
+            text: 'Reset Everything',
+            style: 'destructive',
+            onPress: async () => {
+              try {
+                const AsyncStorage = require('@react-native-async-storage/async-storage').default;
+                await AsyncStorage.removeItem('@field_surveys_list');
+                // Reload context
+                await loadSurveys();
+                clearDraft();
+                Alert.alert('Reset Success', 'All survey data has been cleared.');
+              } catch (err) {
+                Alert.alert('Error', 'Failed to clear data.');
+              }
+            },
           },
-        },
-      ]
-    );
+        ]
+      );
+    }
   };
 
   return (

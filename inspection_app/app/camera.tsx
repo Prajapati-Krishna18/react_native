@@ -106,21 +106,32 @@ export default function CameraScreen() {
 
   // MODULE 3 - DELETE PHOTO WITH CONFIRMATION ALERT
   const handleDeletePhoto = () => {
-    Alert.alert(
-      'Delete Captured Photo',
-      'Are you sure you want to discard this photo? You will need to take another one.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: () => {
-            setPhotoUri(null);
-            setPhotoTimestamp(null);
+    const title = 'Delete Captured Photo';
+    const message = 'Are you sure you want to discard this photo? You will need to take another one.';
+    
+    if (Platform.OS === 'web') {
+      const confirmDelete = window.confirm(`${title}\n\n${message}`);
+      if (confirmDelete) {
+        setPhotoUri(null);
+        setPhotoTimestamp(null);
+      }
+    } else {
+      Alert.alert(
+        title,
+        message,
+        [
+          { text: 'Cancel', style: 'cancel' },
+          {
+            text: 'Delete',
+            style: 'destructive',
+            onPress: () => {
+              setPhotoUri(null);
+              setPhotoTimestamp(null);
+            },
           },
-        },
-      ]
-    );
+        ]
+      );
+    }
   };
 
   // Link captured photo to the active survey draft and return
